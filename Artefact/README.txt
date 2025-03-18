@@ -1,0 +1,3 @@
+python libraries
+firebase_admin
+matplotlib
