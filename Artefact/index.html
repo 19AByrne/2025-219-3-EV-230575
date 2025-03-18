@@ -1,0 +1,750 @@
+<html>
+    <title>Lego Sets</title>
+    <img id='LegoLogo' src="LEGO_logo.png">
+    <span id='NavigationBar'>
+        <a class='hyperlink' href="index.html">Home</a>
+        <a class='hyperlink' href="LegoSiteSurvey.html">Survey</a>
+    </span>
+    <h1>Lego Sets Dataset</h1>
+    <p  class='Info'>Lego is company that produces plastic interlocking toys, usually sold in 'Sets'<br>The dataset used for this analysis includes all history of Legos from the first Lego set released in 1949, up until known Lego sets of 2025<br>
+        Lego Sets are the most popular form of Lego products, a Lego set is a term to describe a group of Lego's sold in the same package,
+        <br>
+    </p>
+    
+    <body>
+        <p>Lego has skyrocketed in popularity since their beginning, this causes a demand to keep producing Lego products. This graph will display the total number of sets released per year.
+            <br>The range of years is changeable using the dual range slider below, press 'Update Range' to update your selected range to the chart
+        </p>
+        <canvas id="Total_Sets_Released_By_Year" style="width:100%;max-width:850px;" class="ChartsClass"></canvas>
+        <br>
+        <span class='RangeSlider'>
+            <input type='range' min='1949' max='2025' value='1949' id='lowerTotal_Sets_Released_By_Year' class="Slider">
+            <input type='range' min='1949' max='2025' value='2025' id='upperTotal_Sets_Released_By_Year' class="Slider">
+            <button id='submitTotal_Sets_Released_By_Year' class='UpdateRangeButton'>Update Range</button>
+        </span>
+        <p id="RangeSliderTotal">1949 - 2025</p><br>
+        <p>As Lego gains popularity, larger Lego sets have become popular too.
+            This graph will display the average number of pieces a Lego set would have per year,<br> The mean is gathered by totalling the number of pieces in all sets released that year, divided by the number of sets released that year.<br>
+            The range of years is changeable using the dual range slider below, press 'Update Range' to update your selected range to the chart
+        </p>
+        <canvas id="Mean_Piece_Count_By_Year" style="width:100%;max-width:850px" class="ChartsClass"></canvas>
+        <br>
+        <span class='RangeSlider'>
+            <input type='range' min='1949' max='2025' value='1949' id='lowerMean_Piece_Count_By_Year' class='Slider'>
+            <input type='range' min='1949' max='2025' value='2025' id='upperMean_Piece_Count_By_Year' class='Slider'>
+            <button id='submitMean_Piece_Count_By_Year' class='UpdateRangeButton'>Update Range</button>
+        </span>
+        <p id="RangeSliderMean">1949 - 2025</p>
+        <br><br>
+        <p>
+            Lego Sets are usually divided into Themes, e.g. Star Wars, Ninjago, City etc. The amount of themes seems to have increased as they release more sets<br>
+            This doughnut chart will display the Frequency each theme occurs in all lego sets, Enter a valid year below the chart to focus the Frequency of themes on a certain year
+        </p>
+        <div class="doughnutChart" style='max-height: 612px;'>
+            <canvas id='Theme_Frequency_By_Year'></canvas>
+            <div class="flex-container-column">
+                <img id='ClickEventImage' src='' hidden>
+                <h4 id="ImageHeading"></h4>
+            </div>
+        </div>
+        <br>
+        <form id='reset_Theme_Frequency_By_Year'>
+            <label id='labelForThemeChart' for='submitTheme_Frequency_By_Year'>Enter Year between 1949 and 2025. </label>
+            <input type='number' id = 'submitTheme_Frequency_By_Year' name = 'Input for Selected Year' min = '1949' max = '2025'>
+            <span>
+                <input type='submit' value='Clear' id='ClearFilter' disabled>
+            </span>
+            <span class="InfoBox">hover for info
+                <span class="InfoBoxToolTip">Click on any element of the doughnut Chart, an image of a random lego set of that theme and year will be shown</span>
+            </span>
+        </form>
+        <span id='invalidYearInput' hidden>No lego Sets were released 1950-1954</span>
+        <span id="OutsideRangeError" hidden>Enter a value WITHIN 1949 - 2025</span>
+        <div>
+            <h1>Questions</h1>
+
+            When did the first <input id='First_Theme_Released_Question' type="search" list='ThemesDataList' placeholder="choose theme" style='width:200px' required> Lego Set Release
+            <datalist id='ThemesDataList'></datalist><button id='First_Theme_Released_Question_Show'>?</button><p style="display: inline; visibility: hidden;" id="FirstThemeError"> Choose a valid theme from the list</p>
+            <ul id="First_Theme_Released_Question_Answer"></ul><br>
+            What Lego Set had the most pieces that was released in <input type='number' id='Largest_Set_Question' min = '1949' max = '2025'> <button id='Largest_Set_Question_Show'>?</button><p style="display: inline; visibility: hidden;" id="LargestSetError">Enter a year from 1949-2025, don't forget no Lego sets were released from 1950-1954</p>
+            <ul id="Largest_Set_Question_Answer"></ul>
+            <p id='Largest_Set_Question_Info'></p>
+            <img id='Largest_Set_Question_Info_img' hidden>
+        </div>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    </body>
+<body>
+
+<style>
+    .Info {
+        font-size: 18px;
+        max-width: 75%;
+    }
+    #Theme_Frequency_By_Year {
+        margin-left: -200px;
+        max-width: 1000px;
+    }
+    .doughnutChart {
+        display : flex;
+        flex-direction: row;
+    }
+    .flex-container-column {
+        display: flex;
+        flex-direction: column;
+    }
+    #ClickEventImage {
+        margin-left: -100px;
+        border: 10px solid black;
+        box-shadow: 0 0 0 10px #ffec01;
+        max-height: 70%;
+    }
+    #Largest_Set_Question_Info_img {
+        border: 10px solid black;
+        box-shadow: 0 0 0 10px #ffec01;
+    }
+    html {
+        background-color: rgb(250, 62, 62);
+    }
+    .ChartsClass{
+        background-color: #fdfdfd;
+        border: 10px solid #000000;
+        box-shadow: 0 0 0 10px #ffec01;
+        padding-top: 10px;
+        padding-right: 10px;
+    }
+
+    #labelForThemeChart {
+        background-color: white;
+        border: 2px solid black;
+        box-shadow: 0 0 0 2px #ffec01;
+        font-size: 16px;
+    }
+    #submitTheme_Frequency_By_Year {
+        background-color: white;
+        border: 2px solid black;
+        box-shadow: 0 0 0 2px #ffec01;
+    }
+    #reset_Theme_Frequency_By_Year {
+        display : flex;
+        gap : 15px;
+    }
+    #invalidYearInput, #OutsideRangeError {
+        border: dashed;
+        margin-right: px;
+    }
+    .InfoBox .InfoBoxToolTip {
+        visibility: hidden;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px  ;
+        border-radius: 6px;
+        position: right;
+    }
+    .InfoBox:hover .InfoBoxToolTip {
+        visibility: visible;
+    }
+    #LegoLogo {
+        position: absolute;
+        width: 256px;
+        height: 256px;
+        top:10px;
+        right: 10px;
+    }
+    input[type=range] {
+        pointer-events: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        pointer-events:auto;
+    }
+
+    #NavigationBar {
+        background-color: #2b2b2b;
+        padding: 12px;
+        position: relative;
+    }
+    .hyperlink {
+        color: #fff;
+    }
+     .Slider {
+        position: absolute;
+    }
+    .UpdateRangeButton {
+        position: absolute;
+        left: 200px
+    }
+    input[type="range"] {
+    -webkit-appearance: none;
+      appearance: none;
+      height: 8px;
+      border: none;
+      margin: 0;
+      border-radius: 5px;
+    }
+    #upperTotal_Sets_Released_By_Year, #upperMean_Piece_Count_By_Year {
+    -webkit-appearance: none;
+      appearance: none;
+      height: 8px;
+      background: none;
+      border: none;
+      margin: 0;
+    }
+</style>
+
+    <script type='module'>
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+
+        import { getDatabase, ref, set, get, update, child, query,orderByChild } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+        
+        let TotalSetsChartConfig = {
+                type: 'bar',
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Total Lego Sets Released Per Year'
+                    },
+                    scales: {
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Years'
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: '# of Lego Sets Released'
+                            }
+                        }]
+                }
+                },
+                data: {
+                    labels: [],
+                    datasets: [{
+
+                        data: []
+                    }]
+                }
+            }
+
+        let MeanSetsChartConfig = {
+                type: 'bar',
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Mean Number of Pieces Per Year'
+                    },
+                    scales: {
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Years'
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Average # of pieces'
+                            }
+                        }]
+                }
+                },
+                data: {
+                    labels: [],
+                    datasets: [{
+
+                        data: []
+                    }]
+                }
+            }
+
+        let ThemeFrequencyChartConfig = {
+            type: 'doughnut',
+            options: {
+                legend: {
+                    display: false
+                },
+                //When an Element of the chart is clicked, it gets the value and year and calls the function to show a picture of a random set
+                onClick : (event, pieElement) => {
+                    if (pieElement.length) {
+                        let indexOfClick = pieElement[0]['_index']
+                        let currentYear = document.getElementById('submitTheme_Frequency_By_Year').value
+                        ShowPicture(ThemeFrequencyChartConfig.data.labels[indexOfClick], currentYear);
+                    }},
+
+                title: {
+                    display: true,
+                    text: 'Theme Frequency',
+                    fontColor : 'rgb(0,0,0)',
+                    fontSize : 15
+                },
+
+                //formatting the tooltip to display data better
+                tooltips: {
+                    displayColors: false,
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var dataset = data.datasets[tooltipItem.datasetIndex];
+                            var currentTheme = data.labels[tooltipItem.index]
+                            var currentValue = dataset.data[tooltipItem.index];
+                            return `${currentTheme}: ${currentValue} Sets`
+                        }
+                    }
+                }
+            },
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: 'rgb(255,255,255)',
+                    borderColor: 'rgb(0,0,0)'
+                }]
+            }
+        }     
+
+        let TotalSetsChart = new Chart('Total_Sets_Released_By_Year', TotalSetsChartConfig);
+        let MeanSetsChart = new Chart('Mean_Piece_Count_By_Year', MeanSetsChartConfig);
+        let ThemeFrequencyChart = new Chart('Theme_Frequency_By_Year', ThemeFrequencyChartConfig)
+        
+        //Creating an object to relate the IDs of the charts to the Chart
+        const ChartIDstoChart = {'Total_Sets_Released_By_Year' : TotalSetsChart,
+                                 'Mean_Piece_Count_By_Year' : MeanSetsChart,
+                                 'Theme_Frequency_By_Year' : ThemeFrequencyChart};
+
+
+        //Creating empty object to relate the IDs of the chart to the values, allows for range to edited
+        let ChartIDstoValues = {};
+
+        //Creating an object to relate the IDs of the charts to their configs
+        const ChartIDstoConfig = {'Total_Sets_Released_By_Year' : TotalSetsChartConfig,
+                                    'Mean_Piece_Count_By_Year' : MeanSetsChartConfig,
+                                'Theme_Frequency_By_Year' : ThemeFrequencyChartConfig};
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_FjLvxGtDiktl9FQkOW6xANOMzQMOqgc",
+            authDomain: "lc-comsci.firebaseapp.com",
+            databaseURL: "https://lc-comsci-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "lc-comsci",
+            storageBucket: "lc-comsci.firebasestorage.app",
+            messagingSenderId: "1055377241861",
+            appId: "1:1055377241861:web:bf36c9ccb760b7933ce96c",
+            measurementId: "G-S43X87EM0L"
+            };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase();
+
+        const firebaseRef = ref(database);
+        
+
+        //defining variables as null before firebase gathers the data for them
+        var TotalSetslabels = null;
+        var TotalSetsvalues = null;
+        var MeanPiecelabels = null;
+        var MeanPiecevalues = null;
+        var ThemeFrequencyAll = null;
+        let ThemesList = null;
+
+        //gets data from firebase database for Total Sets Release Chart
+        get(child(firebaseRef,'/Total_Sets_Released_By_Year/')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    TotalSetslabels = Object.keys(snapshot.val());
+                    TotalSetsvalues = Object.values(snapshot.val());
+                    //Data is now grabbed from firebase and can be added to the Object
+                    ChartIDstoValues[snapshot.key] = TotalSetsvalues;
+                    NewChart(TotalSetslabels, TotalSetsvalues, TotalSetsChart)
+                }})
+
+        //gets data from firebase database for Mean Piece Count Chart
+        get(child(firebaseRef,'/Mean_Piece_Count_By_Year/')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    MeanPiecelabels = Object.keys(snapshot.val());
+                    MeanPiecevalues = Object.values(snapshot.val());
+                    //Data is now grabbed from firebase and can be added to the Object
+                    ChartIDstoValues[snapshot.key] = MeanPiecevalues;
+                    NewChart(MeanPiecelabels, MeanPiecevalues, MeanSetsChart)
+                
+                }})
+        
+        
+        get(child(firebaseRef, '/Theme_Frequency_By_Year/')).then((snapshot) => {
+            if (snapshot.exists()) {
+                //Sends data for all years to function to create chart
+                ThemeFrequencyAll = snapshot.val();
+                DoughnutChart(ThemeFrequencyAll, ThemeFrequencyChart)
+
+                //populating datalist for first theme release question
+                let DataList = document.getElementById('ThemesDataList')
+                ThemesList = Object.keys(ThemeFrequencyAll['AllYears'])
+                ThemesList.forEach(function(item) {
+                    var option = document.createElement('option');
+                    option.value = item;
+                    DataList.appendChild(option);
+                })
+            }
+        })
+
+        //Sends labels and values to the inputted Chart Config and updates Chart
+        function NewChart(xlabels, yvalues, selectedChart) {
+            selectedChart.data.labels = xlabels
+            selectedChart.data.datasets[0].data = yvalues
+            selectedChart.update()
+        }
+
+    
+        function DoughnutChart(All, selectedChart) {
+            //Sorts the keys by their corresponding values numerically
+            let xlabels = Object.keys(All['AllYears']).sort(function(a,b) {return All['AllYears'][a] - All['AllYears'][b]});
+            let yvalues = Object.values(All['AllYears']);
+
+            // let yvaluesString = Object.values(All['AllYears']);
+            // let yvalues = [];
+            // for (let i = 0; i < yvaluesString.length; i++) {
+            //     yvalues.push(Number(yvaluesString[i]));
+            // }
+            
+            //Sorts the values numerical order lowest to highest
+            yvalues.sort(function(a,b) {return a-b});
+
+            //Reverses both labels and values
+            yvalues.reverse();
+            xlabels.reverse();
+
+            //Gets total amount of sets to display in title
+            let totalSets = 0
+                yvalues.forEach( function(item) {
+            totalSets += item})
+
+            selectedChart.options.title.text = `Theme Frequency, ${totalSets} Sets`
+            
+            //Sends sorted data to the chart and updates it
+            selectedChart.data.labels = xlabels;
+            selectedChart.data.datasets[0].data = yvalues;
+            selectedChart.update()
+        }
+
+
+        var lowerSliderTotalSets = document.getElementById('lowerTotal_Sets_Released_By_Year');
+        var upperSliderTotalSets = document.getElementById('upperTotal_Sets_Released_By_Year');
+        
+        //When slider thumb is moved, checking if its passing the other thumb and don't allow it
+        lowerSliderTotalSets.oninput = function() {
+            if (parseInt(upperSliderTotalSets.value) - parseInt(lowerSliderTotalSets.value) <= 1) {
+                lowerSliderTotalSets.value = parseInt(upperSliderTotalSets.value) - 1;}
+
+            //displays value of range
+            document.getElementById('RangeSliderTotal').innerText = `${lowerSliderTotalSets.value} - ${upperSliderTotalSets.value}`
+        }
+
+        //When slider thumb is moved, checking if its passing the other thumb and don't allow it
+        upperSliderTotalSets.oninput = function() {
+            if (parseInt(upperSliderTotalSets.value) - parseInt(lowerSliderTotalSets.value) <= 1) {
+                upperSliderTotalSets.value = parseInt(lowerSliderTotalSets.value) + 1;}
+                        
+            //displays value of range
+            document.getElementById('RangeSliderTotal').innerText = `${lowerSliderTotalSets.value} - ${upperSliderTotalSets.value}`
+        }
+
+        //calls update range function when clicked
+        var UpdateRangeButtonTotalSets = document.getElementById('submitTotal_Sets_Released_By_Year');
+        UpdateRangeButtonTotalSets.addEventListener('click', UpdateRange);
+
+
+        var lowerSliderMeanSets = document.getElementById('lowerMean_Piece_Count_By_Year');
+        var upperSliderMeanSets = document.getElementById('upperMean_Piece_Count_By_Year');
+
+        //When slider thumb is moved, checking if its passing the other thumb and don't allow it        
+        lowerSliderMeanSets.oninput = function() {
+            if (parseInt(upperSliderMeanSets.value) - parseInt(lowerSliderMeanSets.value) <= 1) {
+                lowerSliderMeanSets.value = parseInt(upperSliderMeanSets.value) - 1;}
+            
+            //displays value of range
+            document.getElementById('RangeSliderMean').innerText = `${lowerSliderMeanSets.value} - ${upperSliderMeanSets.value}`
+        }
+        
+        //When slider thumb is moved, checking if its passing the other thumb and don't allow it
+        upperSliderMeanSets.oninput = function() {
+            if (parseInt(upperSliderMeanSets.value) - parseInt(lowerSliderMeanSets.value) <= 1) {
+                upperSliderMeanSets.value = parseInt(lowerSliderMeanSets.value) + 1;}
+
+            //displays value of range
+            document.getElementById('RangeSliderMean').innerText = `${lowerSliderMeanSets.value} - ${upperSliderMeanSets.value}`
+        }
+
+        //calls update range function when clicked
+        var UpdateRangeButtonMeanSets = document.getElementById('submitMean_Piece_Count_By_Year');
+        UpdateRangeButtonMeanSets.addEventListener('click', UpdateRange);
+
+        //Updates the selected range onto selected Chart
+        function UpdateRange(event) {
+            //eventID named with intent of containing the chartID to call and use objects to get relating data to a chart
+            let ChartID = event.target.id.slice(6)
+            
+            //sliders ID named with intent to relate to their ChartID
+            let lower = document.getElementById(`lower${ChartID}`);
+            let upper = document.getElementById(`upper${ChartID}`);
+            let lowerVal = parseInt(lower.value);
+            let upperVal = parseInt(upper.value);
+
+            let UpdatedRangeList = []
+            let UpdatedValues = []
+            //for loop to get all years between lower and upper range values
+            for (let x = lowerVal; x < upperVal+1; x++){
+                x = x.toString()
+                //to be sure invalid years with no data are ignored
+                if (TotalSetslabels.includes(x)){
+                    UpdatedRangeList.push(x);
+
+                    //Gets the value for the year by using the raw labels and values
+                    let i = TotalSetslabels.indexOf(x.toString());
+                    UpdatedValues.push(ChartIDstoValues[ChartID][i]);
+                }
+            }
+            //destroys old chart and sends new updated data to the chart
+            ChartIDstoChart[ChartID].destroy()
+            ChartIDstoChart[ChartID].data.labels = UpdatedRangeList
+            ChartIDstoChart[ChartID].data.datasets[0].data = UpdatedValues
+            ChartIDstoChart[ChartID] = new Chart(ChartID, ChartIDstoConfig[ChartID]);
+        }
+
+        var ThemeFrequencyNumberInput = document.getElementById('submitTheme_Frequency_By_Year')
+        ThemeFrequencyNumberInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault()
+                //new input is submitted clear error messages, if necessary they will reappear
+                document.getElementById('OutsideRangeError').hidden = true;
+                document.getElementById('invalidYearInput').hidden = true;
+
+                //Checks if the input is inside the range
+                if (Number(ThemeFrequencyNumberInput.value) >= 1949 && Number(ThemeFrequencyNumberInput.value) <= 2025){
+
+                    //Checks if the input is an invalid year
+                    if (![1950,1951,1952,1953,1954].includes(Number(ThemeFrequencyNumberInput.value))) {
+                        //chart is now filtered, clear filter button enabled
+                        document.getElementById('ClearFilter').disabled = false
+
+                        let ChartID = event.target.id.slice(6)
+
+                        // let SelectedYear = document.getElementById('submitTheme_Frequency_By_Year')
+                        //Gets keys and values of data under year the user inputted, sorts the keys by their corresponding values numerically
+                        let newlabels = Object.keys(ThemeFrequencyAll[ThemeFrequencyNumberInput.value]).sort(function(a,b) {return ThemeFrequencyAll[ThemeFrequencyNumberInput.value][a] - ThemeFrequencyAll[ThemeFrequencyNumberInput.value][b]});
+                        let newvalues = Object.values(ThemeFrequencyAll[ThemeFrequencyNumberInput.value]);
+
+
+                        // let newvaluesString = Object.values(ThemeFrequencyAll[ThemeFrequencyNumberInput.value]);
+                        // let newvalues = []
+                        // for (let i = 0; i < newvaluesString.length; i++) {
+                        //     newvalues.push(Number(newvaluesString[i]));
+                        // }
+
+
+                        //Sorts the values numerical order lowest to highest
+                        newvalues.sort(function(a,b) {return a-b});
+
+                        //Reverses both labels and values
+                        newlabels.reverse();
+                        newvalues.reverse();
+                        
+                        // ChartIDstoChart[ChartID].clear();
+
+
+                        //Gets total amount of sets to display in title
+                        let totalSets = 0
+                            newvalues.forEach( function(item) {
+                        totalSets += item})
+
+                        //Updates the title with year filtered to and how many total sets there are
+                        ChartIDstoChart[ChartID].options.title.text = `Theme Frequency in ${ThemeFrequencyNumberInput.value}, ${totalSets} Sets`
+
+                        //Sends sorted data to the chart and updates it
+                        ChartIDstoChart[ChartID].data.labels = newlabels
+                        ChartIDstoChart[ChartID].data.datasets[0].data = newvalues
+                        ChartIDstoChart[ChartID].update()
+                        
+                        //Clears the image and the image heading
+                        document.getElementById('ClickEventImage').hidden = true;
+                        document.getElementById('ImageHeading').innerText = '';
+                    }
+                    else {
+                        //invalid year
+                        document.getElementById('invalidYearInput').hidden = false;
+                    }
+                }
+                else {
+                    //outside range
+                    document.getElementById('OutsideRangeError').hidden = false;
+                }
+            }
+        });
+
+
+        var Reset_Theme_Frequency_By_Year_Event = document.getElementById('reset_Theme_Frequency_By_Year')
+        Reset_Theme_Frequency_By_Year_Event.addEventListener('submit', function(event) {
+            event.preventDefault()
+            if (event.target.id == 'reset_Theme_Frequency_By_Year') {
+                //Filter was cleared, disable button
+                document.getElementById('ClearFilter').disabled = true;
+                let ChartID = event.target.id.slice(6)
+                //filter was cleared, reset doughnut chart to all data
+                DoughnutChart(ThemeFrequencyAll, ChartIDstoChart[ChartID])
+                //clears year input box, hides all messages/images
+                document.getElementById('submitTheme_Frequency_By_Year').value = '';
+                document.getElementById('invalidYearInput').hidden = true;
+                document.getElementById('OutsideRangeError').hidden = true;
+                document.getElementById('ClickEventImage').hidden = true;
+                document.getElementById('ImageHeading').innerText = '';
+            }}
+        )
+        
+        //this function takes a Theme and Year, picks a random Lego set that has that theme and released in that year
+        function ShowPicture(Theme, Year) {
+            let listofURLs = [];
+            let listofYears = []; //sharing index with list of urls
+            let listofTitles = []; //sharing index
+
+            //calls data necessary for displaying image and info
+            get(child(firebaseRef, '/Theme_Year_imgURL/')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    //populates lists of info of all lego sets with inputted theme and year
+                    for (let [setID, value] of Object.entries(snapshot.val())) {
+                        if (Year) {
+                            if (value['Year'] == Year && value['Theme'] == Theme) {
+                                listofURLs.push(value['imgID'])
+                                listofTitles.push(value['setTitle']);}}
+                        else {
+                            if (value['Theme'] == Theme) {
+                                listofURLs.push(value['imgID']) 
+                                listofYears.push(value['Year'])
+                                listofTitles.push(value['setTitle']);}}
+                    }
+                //gets random index
+                let length = listofURLs.length;
+                let randomIndex = Math.floor(Math.random() * length);
+
+                //unhides image and sets image source to image filename of random index, surrounds the image filename with the url and file format
+                document.getElementById('ClickEventImage').src = `https://images.brickset.com/sets/images/${listofURLs[randomIndex]}.jpg`;
+                document.getElementById('ClickEventImage').hidden = false;
+
+                //if year is null, there is no filter is on chart, use random index of all data with that theme
+                if (!Year) {
+                    document.getElementById('ImageHeading').innerText = `Theme: ${Theme} | Year Released: ${listofYears[randomIndex]} | Set Title: ${listofTitles[randomIndex]}`}
+                //else use the year that is given as the data inside the lists have to conform to being in that year
+                else {
+                    document.getElementById('ImageHeading').innerText = `Theme: ${Theme} | Year Released: ${Year} | Set Title: ${listofTitles[randomIndex]}`
+                }
+            }})
+        }
+
+        //this function shows the answer to the first theme release question
+        function ShowAnswer(AnswerID, Input) {
+            //ID of the Answer element contains the firebase location of data necessary for answers
+            var firebaseLocation = AnswerID.slice(0,-7)
+            get(child(firebaseRef, firebaseLocation)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    let Answer = snapshot.val()[Input];
+                    var answerElement = document.getElementById(AnswerID);
+                    answerElement.innerText = `The first ${Input} Lego Set was released in ${Answer}`
+                }
+            }) 
+        }
+
+        //This checks at every input change if the input is a valid input
+        let ThemeInputValid = false;
+        let ThemeFirstReleaseInput = document.getElementById('First_Theme_Released_Question')
+        ThemeFirstReleaseInput.addEventListener('input', function(event) {
+            //Removes the answer if new input starts to type
+            document.getElementById('First_Theme_Released_Question_Answer').innerText = '';
+            //Checking if the list exists as its data comes from firebase
+            if (ThemesList) {
+                //This checks if the input is valid by checking if it is in the list
+                if (ThemesList.indexOf(ThemeFirstReleaseInput.value) >= 0) {
+                    ThemeInputValid = true;
+                    } 
+                else {
+                    ThemeInputValid = false;
+                }
+            }
+        })
+
+        //This listens for click to show the answer if input is valid
+        let ShowThemeFirstRelease = document.getElementById('First_Theme_Released_Question_Show');
+        ShowThemeFirstRelease.addEventListener('click', function(event) {
+            if (ThemeInputValid) {
+                ShowAnswer('First_Theme_Released_Question_Answer', ThemeFirstReleaseInput.value)
+                document.getElementById('FirstThemeError').style.visibility = 'hidden';
+            }
+            else {
+                //Tells user the input is not valid
+                document.getElementById('FirstThemeError').style.visibility = 'visible';
+            }
+        })
+
+        //This function displays information and an image of a requested ID, used for showing the largest set released in a year question
+        function returnIDInfo(setID, ElementID) {
+            get(child(firebaseRef, '/Cleaned/')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    //Displaying information and changing image sources by surrounding the image filename with url and file format
+                    document.getElementById(ElementID).innerText = `Set Name : ${snapshot.val()[setID].SetName} | Piece Count : ${snapshot.val()[setID].Pieces} | Theme : ${snapshot.val()[setID].Theme}`
+                    document.getElementById(`${ElementID}_img`).src =  `https://images.brickset.com/sets/images/${snapshot.val()[setID].ImageFilename}.jpg`;
+                    document.getElementById(`${ElementID}_img`).hidden = false;                   
+                }
+            })
+        }
+
+        //This checks at every input change if the input is a valid input
+        let LargestSetValid = false;
+        let LargestSetInput = document.getElementById('Largest_Set_Question');
+        LargestSetInput.addEventListener('input', function(event) {
+            //if new input is being entered hide present answers/information
+            document.getElementById('Largest_Set_Question_Answer').innerText = '';
+            document.getElementById('Largest_Set_Question_Info').innerText = '';
+            document.getElementById('Largest_Set_Question_Info_img').src = '';
+            document.getElementById('Largest_Set_Question_Info_img').hidden = true;
+
+            //getting a list of valid years to check if input is valid
+            let Years = [];
+            for (let x = 1949; x < 2026; x++) {
+                if (![1950,1951,1952,1953,1954].includes(x)) {
+                    Years.push(x);}}
+            
+            if (Years.includes(parseInt(LargestSetInput.value))) {
+                LargestSetValid = true;
+            } 
+            else {
+                LargestSetValid = false;
+            }
+        })
+
+        //This listens for click to show the answer if input is valid
+        let ShowLargestSet = document.getElementById('Largest_Set_Question_Show');
+        ShowLargestSet.addEventListener('click', function(event) {
+            if (LargestSetValid) {
+                //hides error message
+                document.getElementById('LargestSetError').style.visibility = 'hidden';
+
+                //Calls data from firebase to get the answer with the given input
+                get(child(firebaseRef, 'Largest_Set_Question')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    let LargestID = Object.keys(snapshot.val()[LargestSetInput.value])[0]
+                    document.getElementById('Largest_Set_Question_Answer').innerText = `The Largest Set Released in ${LargestSetInput.value} was Lego Set ID ${LargestID}. `
+                    returnIDInfo(LargestID, 'Largest_Set_Question_Info');
+                }
+            })
+            }
+            else {
+                //shows error message to user if input is not valid
+                document.getElementById('LargestSetError').style.visibility = 'visible';
+            }
+         })
+    </script>
+</body>
+</html>
