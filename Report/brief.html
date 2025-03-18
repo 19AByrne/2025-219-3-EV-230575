@@ -1,0 +1,251 @@
+<html>
+    <body>
+    <h1 class="headings">Video</h1>
+    <video></video>
+    <h1 class="headings">Investigation</h1>
+    <p class="paragraph">
+        My first idea was a medical dataset, as it is an area that is important to society, but nothing caught my interest. Then I came across a dataset on FBI firearm background checks and firearm sales, I decided against using this as it was hard to decide what data could be graphed from it. I then decided to research if datasets existed on Lego.  the first dataset I found with Lego had most of the Lego sets but only up to 2022. This dataset did contain a heading with a URL link of an image of each Lego set. I knew that I should consider using this dataset as the image of each Lego set caught my interest and I knew I would want to use it in the website. After further research, I managed to find a completely up to date dataset from the very first Lego set in 1949 up until known Lego sets that were to release in early 2025. This dataset is from brickset.com. [1].
+    </p>
+    <p class="paragraph">
+        This new dataset contained many headings along with 'Image Filename' which after investigating could be shown if the image filename was surrounded with the URL that the dataset was hosted from. For example, an image filename was '700-12', which could then be turned into, 'https://images.brickset.com/sets/images/700-12.jpg'.
+    </p>
+    <p class="paragraph"> 
+        Lego has been very meaningful to me while growing up so this dataset is definitely an area of my interests. For my interactive information system, I want to analyse the number of pieces in Lego sets, is the average number of pieces increasing? Are Lego Sets getting larger? I also want to know how has Lego expanded their collection of themes as when I would have owned Legos they seemed to have less themes then what's available now.
+    </p>
+    <p class="paragraph">
+        While researching existing websites provided by the brief, I came across features I would like to replicate if possible, such as one where a specific date was to be inputted by the user and all sorts of information would be displayed of what occurred on that date. [2]. I also found inspiration from Brickset [3] where they displayed a list of Lego Sets with the most amount of pieces, I would definitely want to replicate this in some way.
+        I am happy that this dataset will allow me to meet both the basic and advanced requirements of the brief and create an information system for all fans of Lego from teens to adults
+    </p>
+    <h1 class="headings">Plan and design</h1>
+    <p class="paragraph">
+        I decided to go with the Lego dataset as it aligns with my interests and will allow me to make a useful information system from teen to adult Lego Fans. 
+    </p>
+    <p class="paragraph">
+        For the development of my website, I will use the AGILE software development method as I find it is best suited to my way of working. 
+    </p>
+    <p class="paragraph">
+        My information system will meet both the basic and advanced requirements. I will use Thonny and python with matplotlib to clean and analyse my raw data and to produce the basic graphs. I will store this data on Firebase which will be my database for my project. 
+    </p>
+    <p class="paragraph">
+        I plan to use VSCode with live server extension to run my website. I will use HTML/CSS and JavaScript for creating my website and ChartJS for the interactive graphs. For the form on the website I do plan to use multiple data types, such as boolean, string and integer, and store them on my Firebase database under its own folder.
+    </p>
+    <p class="paragraph">
+        My graphs will be of the total number of Lego sets by year, the average number of pieces in a Lego set per year and the frequency of every Lego set theme. A basic form of each graph will be displayed from my python analysis and an interactive version will be on the webpage including the images as mentioned in the investigation. I would like some sort of feature where the user can choose to see a Lego Set with some sort of specificity.
+    </p>
+    <p class="paragraph">
+        I will have a recommendation section at the bottom of the main page to provide additional information to the user and also a form on a different page with surveys users about their own thoughts on LEGO. This data for all users will be summarised in a number of graphs on the survey page. Implementing these options will allow me to meet the basic and advanced requirements. 
+    </p>
+    <p class="paragraph">
+        I intend to use OBS Studio and KDenLive to record and edit my video
+    </p>
+    <p class="paragraph">
+        While I don't believe there are any ethical problems with my main page, I will be careful to handle user data submitted through the survey such that it doesn't disclose any personal details of users.
+    </p>
+    <p class="paragraph">
+        The design for my website will incorporate features of universal design such as tolerance for error and perceptible information, I intend to use the LEGO colour scheme throughout the website
+    </p>
+    <p class="paragraph">
+        Below is an Architecture Diagram which shows an overview how my system ties together, followed by flowcharts of my python code and wireframes of my intended layout for my interactive information system.
+    </p>
+    <img src="flowcharts/Architechture diagram.jpg"><br>
+    <h1>Extracting/Cleaning Flowcharts</h1>
+    <img src="flowcharts/Extracting and Cleaning Flowchart.jpg"> 
+    <h1>Analysis Flowcharts</h1>
+    <div class="container">
+        <img style='width:max-content' src="flowcharts/flowchart1.jpg">
+        <img style='width:703px'src="flowcharts/flowchart2.jpg">
+        <img style='width:728px'src="flowcharts/flowchart3.jpg">
+        <img style='width:558px;'src="flowcharts/flowchart4.jpg">
+        <img style='width:648px'src="flowcharts/flowchart5.jpg">
+    </div>
+
+    <h1>Wireframe for main website</h1>
+    <img class='wireframes' src="flowcharts/index wireframe.png">
+
+    <h1>Wireframe for survey</h1>
+    <img class='wireframes' src="flowcharts/survey wireframe.png">
+
+    <h1 class="headings">Create</h1>
+    <h1>Weekly Progress Log</h1>
+    <ul>
+        <li>Week 1, Investigating existing information systems and investigating FBI background checks dataset</li>
+        <li>Week 2, Chose dataset on Lego's, began extracting data from file</li>
+        <li>Week 3, Began attempting to send data to firebase</li>
+        <li>Week 4, analysis.py created, takes cleaned data from firebase, Total Year counter data completed, matplotlib being used to show the total sets released by year</li>
+        <li>Week 5, Mean piece counter function complete, shows in matplotlib, both graphs data sends to firebase</li>
+        <li>Week 6, Cleaning file changes, function made to delete any entry with a given value under given heading, function made to delete any entry with a given keyword throughout the values under any heading. Used pictures of entries to figure out what themes and categories needed to be cleaned</li>
+        <li>Week 7, HTML began, Using firebase and JavaScript graph data was obtained and static bar graphs display on website. 2 Range sliders under both bar graphs to make year range interactive, along with an 'Update' button that sends the range to the chart and updates the chart based on filtered range</li>
+        <li>Week 8, Created function in analysis.py that gets Theme Frequency Data, shows in matplotlib and sends to firebase. JavaScript grabs analysed data and displays static pie chart, It was quite difficult to sort the keys and values on JavaScript as Firebase auto sorts data alphabetically, the pie charts data had to be sorted from highest frequent theme to least to be readable and understandable</li>
+        <li>Week 9, To make pie graph interactable I decided to redo the python function that grabs the data, I remade it to sort the theme frequency counter into each year of data that was present, and then another folder labelled 'All years' which was the original total theme frequency. I created a number input for the user to input a year, which then calls a new function that grabs the data for that inputted year, sorts the data from highest frequency to least, and updates the chart. If the user inputted an invalid year, a message would pop-up and tell the user.</li>
+        <li>Week 10, Started working on a form for the user to complete, based on their experience with Lego. Began pushing this data to firebase, made a function that iterates through all submissions of the form and pushes them all into a collective list to make it simpler to view results and show graphs of the results. Created a function that takes the list of answers, and then creates a dictionary of a frequency counter of the list.</li>
+        <li>Week 11, I created a function inside analysis.py that sends necessary data to firebase for viewing pictures of each entry, it sends the image URL, release year, piece count, theme, and set name all under the unique ID of that set. The data is called from JavaScript when an element of the pie chart is clicked.</li>
+        <li>Week 12, Started recording how my artefact works for the video. wrote an evaluation on my project</li>
+    </ul>
+    <h3>Test Table for Theme Frequency Chart, Year input</h3>
+    <table border="1">
+        <tr>
+            <th>Test Input</th>
+            <th>Expected Result</th>
+            <th>Actual Result</th>
+            <th>Pass</th>
+        </tr>
+        <tr>
+            <td>1999</td>
+            <td>Filter Chart to 1999</td>
+            <td>Filter Chart to 1999</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>1940</td>
+            <td>'OutsideRangeError' message</td>
+            <td>Out of Range Error message</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>1952</td>
+            <td>'invalidYearInput' message</td>
+            <td>'invalidYearInput' message</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>2025</td>
+            <td>Filter Chart to 2025</td>
+            <td>Filter Chart to 2025</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>2026</td>
+            <td>'OutsideRangeError' message</td>
+            <td>'OutsideRangeError'message</td>
+            <td>Yes</td>
+        </tr>
+    </table>
+    <p>Conclusion: Pass</p>
+    <h3>Test Table for Survey, Favourite Theme input</h3>
+    <table border="1">
+        <tr>
+            <th>Test Input</th>
+            <th>Expected Result</th>
+            <th>Actual Result</th>
+            <th>Pass</th>
+        </tr>
+        <tr>
+            <td>Ninjago</td>
+            <td>Form Valid</td>
+            <td>Form Valid</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>Star Wars</td>
+            <td>Form Valid</td>
+            <td>Form Valid</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>starwars</td>
+            <td>Form Not Valid</td>
+            <td>Form Not Valid</td>
+            <td>Yes</td>
+        </tr>
+        <tr>
+            <td>Star_Wars</td>
+            <td>Form Not Valid</td>
+            <td>Form Not Valid</td>
+            <td>Yes</td>
+        </tr>
+    </table>
+    <p>Conclusion: Pass</p>
+    <p>The test tables I have created on these inputs have passed, this tells me I have correctly created input validators for my artefact.</p>
+
+    <h1>Problem I encountered</h1>
+    <p class="paragraph">I encountered a problem while making the bar charts interactive on the website. While creating the dual range slider, because it is 2 range sliders that sit on top of each other to allow the user to input a start and end year for the year range, the sliders thumbs could overlap and go beyond each other. This would create errors in the chart as a range could not work if the lower value was higher than the upper value.</p>
+    <p class="paragraph">To solve this, I created a function for each slider when either sliders thumb is moved, It checks if the difference between the upper and lower values is less than or equal to one. This condition is used for both functions because if the difference between them was less than or equal to one, it means they are about overlap.</p>
+    <ul> <li>When adjusting the lower value, if they are about to overlap, the function keeps the lower value at upper value - 1.</li>
+         <li>When adjusting the upper value, if they are about to overlap, the function keeps the upper value at lower value + 1.</li></ul>
+    <p class="paragraph">This ensures the values cannot overlap each other and can no longer cause errors for the chart.</p>
+
+
+    <h1>Algorithm</h1>
+    <p class="paragraph">I will explain the algorithm I created for extracting the data from the raw CSV and storing it inside a dictionary.</p>
+    <p class="paragraph">Here is the pseudocode for this algorithm and the real code</p>
+    <div class="container">
+    <pre style="border: 2px solid black; width: auto; display: inline-block; padding: 15px;"><code>    Open 'Brickset-allsets.csv' file
+    Header = FirstLineOfFile
+    Split Header into a list
+    Strip values of HeaderList
+    
+    Create empty mainDictionary
+    For line in 'Brickset-allsets.csv':
+        if line blank:
+            skip line
+        
+        Split Line into a list
+        Strip values of LineList
+    
+        Create an empty innerDictionary
+        for each index in LineList:
+            the innerdictionary key is equal to the headerlist value at this index
+            the innerdictionary value is equal to the line list value at this index
+
+        the mainDictionary key is equal to the first index of lineList
+        the mainDictionary Value is equal to the innerDictionary
+    </code></pre>
+    <img src="flowcharts/Extracting Code.png" style="height: 345px;">
+    </div>
+    <p class="paragraph">The first step for the algorithm I made to extract the data from the CSV is to open the file in read mode, I use the built-in <code>file.readline()</code> function to read the first line of the file to a header, I then strip '\n\' from the header and split header into a list to have a value for each heading of each column, I strip ' “ ' from each value in header using list comprehension to have clean values of each heading. I create an empty dictionary and start iterating through the file, <code>if not line.strip()</code> is used as <code>str.strip()</code> on a blank string returns nothing, the <code>not</code> keyword can be added in front of this statement to flip the value as if it was boolean. <code>not str.strip()</code> returns <code>True</code> for a blank string, if a line is blank the entry is skipped using the <code>break</code> keyword. I use <code>line.split('“')</code> as the values in the csv are surrounded with double quotes and then separated with commas, as commas are present in values without separating the values. I then use list comprehension to strip any remaining double quotes and '\n' from the values. I create an empty dictionary inside the loop to store the data for each entry, which will be added to the main dictionary. Now iterate over the indices of the line using a <code>for</code> loop with <code>range(len(line))</code>,and create a key-value pair for each value by mapping a column header to its corresponding value to go in the inner dictionary. Finally create another key-value pair by mapping each entries set ID, which is a unique ID, to the inner dictionary, which contains all of the data for that entry.</p>
+    <h1 class="headings">Evaluation</h1>
+    <p class="paragraph">To reflect on my artefact, I feel satisfied with how I have achieved the basic & advanced requirements outlined in the brief, and how I have proven that I have with the video. I feel that I have achieved these requirements to the best of my ability, and I am confident that my system is user friendly because of testing and adherence to universal design principles.</p>
+    <p class="paragraph">The visual design is another aspect I am proud of, especially the creativity with the colour scheme of my website matching the dataset my artefact was on. I am also pleased with how I chose to visualise my analysed data, I feel that the graphs were informative and visually pleasing.</p>
+    <p class="paragraph">I also feel satisfied with the tidiness and organisation of data stored in my firebase database, this early focus on storing the data allowed the rest of the project to progress more smoothly, as it ensured easy access to my data and gave confidence during debugging knowing my data in firebase was well-organized.</p>
+    <p class="paragraph">If I had more time, I would have created a graph that displayed the largest Lego sets by piece count, hovering over these elements of the graph would allow the user to see all sorts of information and a picture of the Lego set, this feature would have been another more engaging interactive aspect to my artefact. I would have liked to allow the user to search for Lego sets, to be able to filter by theme, year released or choose a range of number of pieces, and even use a search bar, I could utilise how JavaScript can populate a datalist from firebase data, as the user types the dropdown search input would show the user everything they are searching for.</p>
+    <h1 class="headings">References</h1>
+    <p class="paragraph">[1] Download link to CSV <a href="https://brickset.com/exportscripts/sets/all">https://brickset.com/exportscripts/sets/all</a></p>
+    <p class="paragraph">[2] <a href="https://www2.hse.ie/services/urgent-emergency-care-report/">https://www2.hse.ie/services/urgent-emergency-care-report/</a></p>
+    <p class="paragraph">[3] <a href="https://brickset.com/">https://brickset.com/</a></p>
+    <h1 class="headings">Summary word count</h1>
+    <table border="1">
+        <tr>
+            <th>Section</th>
+            <th>Word Count</th>
+        </tr>
+        <tr>
+            <td>1. Meeting the brief</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>2. Investigation</td>
+            <td>407</td>
+        </tr>
+        <tr>
+            <td>3. Plan and design</td>
+            <td>425</td>
+        </tr>
+        <tr>
+            <td>4. Create</td>
+            <td>1052</td>
+        </tr>
+        <tr>
+            <td>5. Evaluation</td>
+            <td>291</td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>2175</td>
+        </tr>
+    </table>
+</body>
+    <style>
+        .paragraph {
+            max-width: 50%;
+        }
+        .wireframes {
+            max-width: 100%;
+        }
+        .container {
+            display: flex;
+        }
+        .headings {
+            font-size: 55px;
+        }
+    </style>
+</html>
