@@ -1,0 +1,395 @@
+<html>
+ <title>Lego Sets Survey</title>
+ <img id='LegoLogo' src="LEGO_logo.png">
+ <span id='NavigationBar'>
+    <a class='hyperlink' href="index.html">Home</a>
+    <a class='hyperlink' href="LegoSiteSurvey.html">Survey</a>
+ </span>
+ <body>
+    <h1>Lego Sets Survey</h1>
+<form id='submitForm'>
+    <label for="userAge">How old are you?</label>
+    <input id='userAge' type="number" min="1" max='99' placeholder="age" class='SurveyForm'>
+    <div><br>
+    <label for="boolCollectsLego">Do you collect Lego Sets?</label>
+    <input type="checkbox" id="boolCollectsLego" class='SurveyForm'>
+    </div>
+    <label for="userFavouriteTheme">What is your favourite Theme?</label>
+    <input id='userFavouriteTheme' type="search" list='ThemesDataList' placeholder="Start Typing a Theme" style='width:200px' class='SurveyForm'>
+    <datalist id='ThemesDataList'></datalist>
+    <p style='display: inline-block; visibility: hidden;'id="ThemeError">Enter a Valid Theme</p><br>
+    <label for="leadFactorOfPurchase">What influences you to purchase a lego set the most?</label>
+    <input id="userPurchaseFactor" type="search" list="Factors"  style="width: 285px" class='SurveyForm'>
+    <datalist id="Factors">
+        <option value="Price"></option>
+        <option value="Piece Count"></option>
+        <option value="Theme"></option>
+        <option value="Aesthetic"></option>
+        <option value='To have fun'></option>
+        <option value="Exclusivity">e.g. potential rare set or collective purposes</option>
+    </datalist><p style='display: inline-block; visibility: hidden;'id="FactorError">Choose a Valid Option</p><br>
+    <p id="QuestionBuildingMethod">What is your preferred method while building lego sets?</p><br>
+    <label for="StrictlyInstructions">Strictly use manual</label>
+    <input type="radio" name="buildingMethod" id="StrictyInstructions" value="uses Instruction Manual" class='SurveyForm' checked><br>
+    <label for="PartlyIntructions">Partly use manual</label>
+    <input type="radio" name="buildingMethod" id="PartlyIntructions" value="Partly uses Instruction Manual" class='SurveyForm'><br>
+    <label for="NoIntrusctions">No manual, freestyle</label>
+    <input type="radio" name="buildingMethod" id="NoInstructions" value="Does not use Instruction Manual" class='SurveyForm'>
+    <br><br><input type='submit' value='Submit' class="SurveyForm">
+    <button id='ViewResults'>View Results</button>
+</form>
+<div id='ResultsDiv' hidden>
+    <canvas class='Charts' id='CollectorChart'></canvas>
+    <canvas class='Charts' id='AgesChart'></canvas>
+    <canvas class='Charts' id='FavouriteThemeChart'></canvas>
+    <canvas class='Charts' id='FactorsChart'></canvas>
+    <canvas class='Charts' id='BuildingMethodChart'></canvas>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+</body>
+
+<style>
+    #QuestionBuildingMethod {
+        display: inline
+    }
+    html {
+        background-color: rgb(250, 62, 62);
+    }
+    #LegoLogo {
+        position: absolute;
+        width: 256px;
+        height: 256px;
+        top:10px;
+        right: 10px;
+    }
+    .Charts {
+        max-width: 780px;
+        flex-direction: row;   
+    }
+    #NavigationBar {
+        background-color: #2b2b2b;
+        padding: 12px;
+        position: relative;
+    }
+    .hyperlink {
+        color: #fff;
+    }
+</style>
+<script type='module'>
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, ref, set, get, update, child, query,orderByChild, push, onValue} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+    
+    const firebaseConfig = {
+            apiKey: "AIzaSyC_FjLvxGtDiktl9FQkOW6xANOMzQMOqgc",
+            authDomain: "lc-comsci.firebaseapp.com",
+            databaseURL: "https://lc-comsci-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "lc-comsci",
+            storageBucket: "lc-comsci.firebasestorage.app",
+            messagingSenderId: "1055377241861",
+            appId: "1:1055377241861:web:bf36c9ccb760b7933ce96c",
+            measurementId: "G-S43X87EM0L"
+            };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase();
+
+    const firebaseRef = ref(database);
+    
+    //populating datalist for favourite theme question
+    let Themes = null;
+    get(child(firebaseRef, '/Theme_Frequency_By_Year/')).then((snapshot) => {
+        if (snapshot.exists()) {
+            Themes = Object.keys(snapshot.val()['AllYears'])
+            var datalist = document.getElementById('ThemesDataList');
+            Themes.forEach(function(item) {
+                var option = document.createElement('option');
+                option.value = item;
+                datalist.appendChild(option);
+            })
+            }
+        }
+    )
+    
+    //gets all elements of the survey form and applies event.preventdefault to each
+    const FormElements = document.getElementsByClassName('SurveyForm');
+    for (let i = 0; i < FormElements.length; i++) {
+        FormElements[i].addEventListener('keydown', function(event) {
+            if (event.key == 'Enter') {
+                event.preventDefault()
+            }});
+    }
+
+    //list of possible factors for user to pick
+    const Factors = ['Price', 'Piece Count', 'Theme', 'Aesthetic', 'To have fun', 'Exclusivity']
+
+    
+    let submitFormButton = document.getElementById('submitForm')
+    submitFormButton.addEventListener('submit', function(event) {
+        event.preventDefault()
+        let FormValid = true;
+
+        //Getting the value from each input in the form and validating them
+        let userAgeElement = document.getElementById('userAge');
+        let userAgeValue = parseInt(userAgeElement.value);
+
+        let userCollectsLegoElement = document.getElementById('boolCollectsLego');
+        let userCollectsLegoBool = userCollectsLegoElement.checked;
+
+        let userFavouriteThemeElement = document.getElementById('userFavouriteTheme');
+        let userFavouriteThemeValue = userFavouriteThemeElement.value;
+        //Checking if the input is in the list of themes, shows error message if invalid
+        if (!Themes.includes(userFavouriteThemeValue)) {
+            document.getElementById('ThemeError').style.visibility = 'visible';
+            FormValid = false;
+        }
+        else {document.getElementById('ThemeError').style.visibility = 'hidden';}
+
+        let leadFactorOfPurchaseElement = document.getElementById('userPurchaseFactor');
+        let leadFactorOfPurchaseValue = leadFactorOfPurchaseElement.value;
+        //Checking if input is in list of factors, shows error message if invalid
+        if (!Factors.includes(leadFactorOfPurchaseValue)) {
+            document.getElementById('FactorError').style.visibility = 'visible';
+            FormValid = false;
+        }
+        else {document.getElementById('FactorError').style.visibility = 'hidden';}
+
+        let userbuildingMethod = document.querySelector('input[name=buildingMethod]:checked').value;
+
+        //if the form is valid push this result to firebase
+        if (FormValid) {
+        push(child(firebaseRef, '/Form_Results/'), ({'Age': userAgeValue,
+                                             'is Collector': userCollectsLegoBool,
+                                            'Favourite Theme' : userFavouriteThemeValue,
+                                            'Leading Factor on a Purchase' : leadFactorOfPurchaseValue,
+                                            'Preferred Building Method' : userbuildingMethod}));
+                                   
+                                            
+    let AllLists = [];
+    //Gets all the form results and places each result into a list
+    get(child(firebaseRef, '/Form_Results/')).then((snapshot) => {
+        if (snapshot.exists()) {
+            var AgesList = [];
+            var BoolCollectsList = [];
+            var ThemesList = [];
+            var FactorList = [];
+            var BuildingMethodList = [];
+            AllLists = [AgesList,BoolCollectsList,ThemesList,FactorList,BuildingMethodList]
+
+            //to iterate through each survey answer
+            let ResultsKeys = Object.keys(snapshot.val());
+            ResultsKeys.forEach(function(item) {
+                if (item != 'All_Results'){
+                AgesList.push(snapshot.val()[item]['Age']);
+                BoolCollectsList.push(snapshot.val()[item]['is Collector']);
+                ThemesList.push(snapshot.val()[item]['Favourite Theme']);
+                FactorList.push(snapshot.val()[item]['Leading Factor on a Purchase']);
+                BuildingMethodList.push(snapshot.val()[item]['Preferred Building Method']);
+                }
+            })
+            //Sets all collected result into its own folder in firebase
+            set(child(firebaseRef, '/Form_Results/All_Results/'), ({'Ages': AgesList,
+                                             'is Collector': BoolCollectsList,
+                                            'Favourite Themes' : ThemesList,
+                                            'Leading Factors on a Purchase' : FactorList,
+                                            'Preferred Building Methods' : BuildingMethodList}));
+        }
+    })
+    //Reseting all the form boxes on submission
+    var Elements = document.getElementsByClassName('SurveyForm')
+    for (let i = 0; i < Elements.length-4; i++) {
+        Elements[i].value = null;
+    }
+    document.getElementById('boolCollectsLego').checked = false;
+    document.getElementById('StrictyInstructions').checked = true;
+}
+})
+
+    let CollectorChartConfig = {
+                type: 'pie',
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'How Many Users Collect Lego Sets',
+                        fontColor : 'rgb(0,0,0)',
+                        fontSize : 15
+                    }
+                },
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        borderColor: '#000000',
+                        backgroundColor: ['rgb(0,255,0)','rgb(255,0,0)']
+                    }]
+                }
+            }
+    
+    let AgeChartConfig = {
+                type: 'bar',
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Ages of Users',
+                        fontColor : 'rgb(0,0,0)',
+                        fontSize : 15
+                    },
+                    scales : {
+                        yAxes: [
+                            {ticks : {
+                            beginAtZero : true}}]}
+                    },
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        borderColor: '#000000',
+                        backgroundColor: '#ffec01',
+                        borderWidth: 4
+                    }]
+                },
+                defaults : {
+                    elements : {
+                        bar : {
+                            borderWidth : 500
+                        }
+                    }
+                }}
+    
+    let FavouriteThemeChartConfig = {
+                type: 'bar',
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Favourite Themes',
+                        fontColor : 'rgb(0,0,0)',
+                        fontSize : 15
+                    },
+                    scales : {
+                        yAxes: [
+                            {ticks : {
+                            beginAtZero : true}}]}
+                    },
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        borderColor: '#000000',
+                        backgroundColor: '#ffec01',
+                        borderWidth: 4
+                        
+                    }]
+                }}
+    let FactorsChartConfig = {
+                type: 'bar',
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Leading Factors of a Purchase',
+                        fontColor : 'rgb(0,0,0)',
+                        fontSize : 15
+                    },
+                    scales : {
+                        yAxes: [
+                            {ticks : {
+                            beginAtZero : true}}]}
+                    },
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        borderColor: '#000000',
+                        backgroundColor: '#ffec01',
+                        borderWidth: 4
+                    }]
+                }}
+
+    let BuildingMethodChartConfig = {
+                type: 'polarArea',
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Users Preferred Building Methods',
+                        fontColor : 'rgb(0,0,0)',
+                        fontSize : 15
+                    }
+                },
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: ['#04c96d','#545f9f','#c904c9']
+                    }]
+                }
+            }
+
+    let AgesChart = new Chart('AgesChart', AgeChartConfig);
+    let CollectorChart = new Chart('CollectorChart', CollectorChartConfig);
+    let FavouriteThemeChart = new Chart('FavouriteThemeChart', FavouriteThemeChartConfig);
+    let FactorsChart = new Chart('FactorsChart', FactorsChartConfig);
+    let BuildingMethodChart = new Chart('BuildingMethodChart', BuildingMethodChartConfig);
+
+    const ConfigList = [AgeChartConfig,
+                        FavouriteThemeChartConfig,
+                        FactorsChartConfig,
+                        BuildingMethodChartConfig,
+                        CollectorChartConfig]
+
+    const ChartList = [AgesChart,
+                        FavouriteThemeChart,
+                        FactorsChart,
+                        BuildingMethodChart,
+                        CollectorChart]
+    
+    //this function takes a list of data and updates it to a chart
+    function SurveyDataToChart(List, Config, Chart) {
+        let Data = {};
+        //this turns the list into a frequency counter
+        for (const val of List) { Data[val] = Data[val] ? Data[val] + 1 : 1;}
+
+        //updates the values and labels and updates the chart
+        Config.data.labels = Object.keys(Data);
+        Config.data.datasets[0].data = Object.values(Data);
+        Chart.update()
+    }
+
+
+    let ViewResultsButton = document.getElementById('ViewResults')
+    ViewResultsButton.addEventListener('click', function(event) {
+        event.preventDefault()
+        //Disables all form inputs while viewing results
+        for (let i = 0; i < FormElements.length; i++) {
+            FormElements[i].disabled = !FormElements[i].disabled;
+        }
+
+        //toggles the view
+        document.getElementById('ResultsDiv').hidden = !document.getElementById('ResultsDiv').hidden
+
+        //if showing is true, grab all results from firebase and send to charts
+        if (!document.getElementById('ResultsDiv').hidden) {
+        get(child(firebaseRef, '/Form_Results/All_Results/')).then((snapshot) => {
+            if (snapshot.exists()) {
+                //this iterates through each list of results and sends list to the function
+                Object.keys(snapshot.val()).forEach(function(item,index){
+                    SurveyDataToChart(snapshot.val()[item],ConfigList[index], ChartList[index])
+                })
+            }
+        })
+    }})
+</script>
+</html>
