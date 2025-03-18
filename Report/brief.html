@@ -47,23 +47,23 @@
     <p class="paragraph">
         Below is an Architecture Diagram which shows an overview how my system ties together, followed by flowcharts of my python code and wireframes of my intended layout for my interactive information system.
     </p>
-    <img src="flowcharts/Architechture diagram.jpg"><br>
+    <img src="Images/Architechture diagram.jpg"><br>
     <h1>Extracting/Cleaning Flowcharts</h1>
-    <img src="flowcharts/Extracting and Cleaning Flowchart.jpg"> 
+    <img src="Images/Extracting and Cleaning Flowchart.jpg"> 
     <h1>Analysis Flowcharts</h1>
     <div class="container">
-        <img style='width:max-content' src="flowcharts/flowchart1.jpg">
-        <img style='width:703px'src="flowcharts/flowchart2.jpg">
-        <img style='width:728px'src="flowcharts/flowchart3.jpg">
-        <img style='width:558px;'src="flowcharts/flowchart4.jpg">
-        <img style='width:648px'src="flowcharts/flowchart5.jpg">
+        <img style='width:max-content' src="Images/flowchart1.jpg">
+        <img style='width:703px'src="Images/flowchart2.jpg">
+        <img style='width:728px'src="Images/flowchart3.jpg">
+        <img style='width:558px;'src="Images/flowchart4.jpg">
+        <img style='width:648px'src="Images/flowchart5.jpg">
     </div>
 
     <h1>Wireframe for main website</h1>
-    <img class='wireframes' src="flowcharts/index wireframe.png">
+    <img class='wireframes' src="Images/index wireframe.png">
 
     <h1>Wireframe for survey</h1>
-    <img class='wireframes' src="flowcharts/survey wireframe.png">
+    <img class='wireframes' src="Images/survey wireframe.png">
 
     <h1 class="headings">Create</h1>
     <h1>Weekly Progress Log</h1>
@@ -190,7 +190,7 @@
         the mainDictionary key is equal to the first index of lineList
         the mainDictionary Value is equal to the innerDictionary
     </code></pre>
-    <img src="flowcharts/Extracting Code.png" style="height: 345px;">
+    <img src="Images/Extracting Code.png" style="height: 345px;">
     </div>
     <p class="paragraph">The first step for the algorithm I made to extract the data from the CSV is to open the file in read mode, I use the built-in <code>file.readline()</code> function to read the first line of the file to a header, I then strip '\n\' from the header and split header into a list to have a value for each heading of each column, I strip ' “ ' from each value in header using list comprehension to have clean values of each heading. I create an empty dictionary and start iterating through the file, <code>if not line.strip()</code> is used as <code>str.strip()</code> on a blank string returns nothing, the <code>not</code> keyword can be added in front of this statement to flip the value as if it was boolean. <code>not str.strip()</code> returns <code>True</code> for a blank string, if a line is blank the entry is skipped using the <code>break</code> keyword. I use <code>line.split('“')</code> as the values in the csv are surrounded with double quotes and then separated with commas, as commas are present in values without separating the values. I then use list comprehension to strip any remaining double quotes and '\n' from the values. I create an empty dictionary inside the loop to store the data for each entry, which will be added to the main dictionary. Now iterate over the indices of the line using a <code>for</code> loop with <code>range(len(line))</code>,and create a key-value pair for each value by mapping a column header to its corresponding value to go in the inner dictionary. Finally create another key-value pair by mapping each entries set ID, which is a unique ID, to the inner dictionary, which contains all of the data for that entry.</p>
     <h1 class="headings">Evaluation</h1>
